@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Deep Sports Debate Arena · Quick-Fire (v0)</title>
+  <title>Deep Sports Debate Arena · Quick-Fire</title>
   <style>
     :root { color-scheme: dark; }
     body { margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#0a0a0a; color:#f1f1f1; }
@@ -17,7 +17,6 @@
     .btn-cta[disabled] { background:#3a3a3a; color:#9a9a9a; cursor:not-allowed; }
     .pill { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#a1a1a1 }
     .h1 { font-size:28px; font-weight:800; }
-    .h2 { font-size:18px; font-weight:700; color:#cfcfcf; margin-bottom:6px; }
     .muted { color:#9a9a9a; }
     .list { display:grid; gap:8px; }
     .item { display:flex; justify-content:space-between; align-items:center; gap:12px; background:#1a1a1a; border:1px solid #2a2a2a; padding:10px 12px; border-radius:10px; }
@@ -26,14 +25,17 @@
     .chip { background:#262626; padding:6px 10px; border-radius:999px; font-size:12px; border:1px solid #333; }
     .select, select, .timer { background:#111; border:1px solid #2a2a2a; color:#eaeaea; border-radius:12px; padding:8px 10px; }
     .verdict { background:#1f2937; border:1px solid #334155; padding:12px; border-radius:12px; }
+    .link { font-size:12px; color:#93c5fd; text-decoration: underline; cursor:pointer }
     .footer { color:#9a9a9a; text-align:center; margin-top:12px; font-size:13px; }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="row" style="grid-template-columns: 1fr auto; align-items:center; margin-bottom:16px">
-      <div class="h1">Deep Sports Debate Arena · Quick-Fire (v0)</div>
+      <div class="h1">Deep Sports Debate Arena · Quick-Fire</div>
       <div class="stack">
+        <label class="muted" for="topicSel">Topic</label>
+        <select id="topicSel" class="select"></select>
         <select id="persona" class="select">
           <option>Rowdy Pub</option>
           <option>Respectful Analysts</option>
@@ -45,17 +47,17 @@
 
     <section class="card">
       <div class="pill">Topic</div>
-      <div id="topicTitle" style="font-size:22px; font-weight:700; margin-top:4px">Who won the 2025 Premier League transfer window?</div>
+      <div id="topicTitle" style="font-size:22px; font-weight:700; margin-top:4px"></div>
 
       <div class="row row-2" style="margin-top:12px">
         <div class="card" style="background:#181818">
           <div class="muted" style="font-size:13px">Side A</div>
-          <div style="font-size:18px; font-weight:600" id="sideA">Manchester United</div>
+          <div style="font-size:18px; font-weight:600" id="sideA"></div>
           <button id="joinA" class="btn" style="margin-top:8px">Join Side A</button>
         </div>
         <div class="card" style="background:#181818">
           <div class="muted" style="font-size:13px">Side B</div>
-          <div style="font-size:18px; font-weight:600" id="sideB">Chelsea</div>
+          <div style="font-size:18px; font-weight:600" id="sideB"></div>
           <button id="joinB" class="btn" style="margin-top:8px">Join Side B</button>
         </div>
       </div>
@@ -94,59 +96,20 @@
         <div id="verdictBox" class="verdict" style="display:none; margin-top:12px">
           <div class="pill">Verdict</div>
           <div id="verdictText" style="margin-top:4px; font-size:16px; font-weight:600"></div>
+          <div class="muted" style="margin-top:6px">Share this debate: <span id="shareLink" class="link"></span></div>
         </div>
       </div>
     </section>
 
-    <div class="footer">v0 mock • No backend • Designed to feel like the finished loop</div>
+    <div class="footer">v0.1 • Static • topics.json powered</div>
   </div>
 
   <script>
-    const seed = {
-      title: 'Who won the 2025 Premier League transfer window?',
-      sides: ['Manchester United','Chelsea'],
-      facts: [
-        { label: 'United spend', value: '€165m' },
-        { label: 'Chelsea spend', value: '€210m' },
-        { label: 'United players in', value: 4 },
-        { label: 'Chelsea players in', value: 6 },
-        { label: 'United net spend (approx)', value: '€120m' },
-        { label: 'Chelsea net spend (approx)', value: '€160m' },
-      ],
-      derived: [
-        { label: 'Average age of signings (Utd)', value: 24.2 },
-        { label: 'Average age of signings (Che)', value: 22.6 },
-        { label: 'Projected minutes added (Utd)', value: 6500 },
-        { label: 'Projected minutes added (Che)', value: 8100 },
-        { label: 'Tactical fit score (Utd)', value: 74 },
-        { label: 'Tactical fit score (Che)', value: 69 },
-      ]
-    };
-
     const crowdLines = {
-      "Rowdy Pub": [
-        "Bosh! Say it with your chest!",
-        "Bottle jobs!",
-        "Stats don't lie... or do they?",
-        "He's cooked!",
-        "Net spend tax incoming!"
-      ],
-      "Respectful Analysts": [
-        "Interesting point on age profile.",
-        "Please cite a source for that claim.",
-        "Small sample size caveat applies.",
-        "Consider fixture congestion effects.",
-        "Good argument structure."
-      ],
-      "Talk Radio": [
-        "Cut the waffle—who's the winner?",
-        "Hot take alert!",
-        "This is not for the purists!",
-        "Phone-in lines are melting!",
-        "Producer says keep it moving!"
-      ]
+      "Rowdy Pub": ["Bosh! Say it with your chest!","Bottle jobs!","Stats don't lie... or do they?","He's cooked!","Net spend tax incoming!"],
+      "Respectful Analysts": ["Interesting point on age profile.","Please cite a source for that claim.","Small sample size caveat applies.","Consider fixture congestion effects.","Good argument structure."],
+      "Talk Radio": ["Cut the waffle—who's the winner?","Hot take alert!","This is not for the purists!","Phone-in lines are melting!","Producer says keep it moving!"]
     };
-
     const modPrompts = [
       "Moderator: Opening statements—keep it tight.",
       "Address value vs. cost: who got more per euro?",
@@ -156,9 +119,13 @@
       "Compare to last season's window—progress or repeat mistakes?"
     ];
 
-    // DOM
+    // DOM refs
     const personaSel = document.getElementById('persona');
     const personaLabel = document.getElementById('personaLabel');
+    const topicSel = document.getElementById('topicSel');
+    const topicTitle = document.getElementById('topicTitle');
+    const sideA = document.getElementById('sideA');
+    const sideB = document.getElementById('sideB');
     const joinA = document.getElementById('joinA');
     const joinB = document.getElementById('joinB');
     const startBtn = document.getElementById('startBtn');
@@ -173,24 +140,124 @@
     const resetBtn = document.getElementById('resetBtn');
     const verdictBox = document.getElementById('verdictBox');
     const verdictText = document.getElementById('verdictText');
+    const shareLink = document.getElementById('shareLink');
 
     // State
+    let topics = [];
+    let current = 0;
     let joinedSide = null; // 'A' | 'B' | null
     let round = 0; // 0 lobby, 1..2 active, 99 verdict
     let usedStats = new Set();
     let aScore = 0, bScore = 0;
     let tick = null;
     let t = 45;
+    let crowdTicker = null;
 
-    function uiRenderLists() {
-      factsEl.innerHTML = '';
-      seed.facts.forEach((s, i) => {
-        const li = document.createElement('div');
-        li.className = 'item';
-        li.innerHTML = `<div><div>${s.label}</div><div class="muted" style="font-size:13px">${s.value}</div></div>
-                        <button class="btn">Use as Stat Drop</button>`;
-        li.querySelector('button').onclick = () => dropStat(`${s.label}:${s.value}`);
-        factsEl.appendChild(li);
-      });
-      derivedEl.innerHTML = '';
-      seed.derived.forE
+    // Helpers
+    function randomPick(arr){ return arr[Math.floor(Math.random()*arr.length)] }
+    function addCrowd(line) { const div = document.createElement('div'); div.className='chip'; div.textContent=line; crowdFeed.prepend(div); while (crowdFeed.children.length>8) crowdFeed.removeChild(crowdFeed.lastChild); }
+    function addMod(line) { const div = document.createElement('div'); div.className='chip'; div.textContent=line; modFeed.prepend(div); while (modFeed.children.length>8) modFeed.removeChild(modFeed.lastChild); }
+    function uiRenderLists(topic) {
+      factsEl.innerHTML=''; topic.facts?.forEach(s=>{ const li=document.createElement('div'); li.className='item'; li.innerHTML=`<div><div>${s.label}</div><div class="muted" style="font-size:13px">${s.value}</div></div><button class="btn">Use as Stat Drop</button>`; li.querySelector('button').onclick=()=>dropStat(`${s.label}:${s.value}`); factsEl.appendChild(li); });
+      derivedEl.innerHTML=''; topic.derived?.forEach(s=>{ const li=document.createElement('div'); li.className='item'; li.innerHTML=`<div><div>${s.label}</div><div class="muted" style="font-size:13px">${s.value}</div></div><button class="btn">Use as Stat Drop</button>`; li.querySelector('button').onclick=()=>dropStat(`${s.label}:${s.value}`); derivedEl.appendChild(li); });
+    }
+    function startCrowdTicker() { if (crowdTicker) clearInterval(crowdTicker); crowdTicker = setInterval(()=>{ addCrowd(randomPick(crowdLines[personaSel.value])); }, 2500); }
+    function stopCrowdTicker() { if (crowdTicker) clearInterval(crowdTicker); crowdTicker = null; }
+
+    // Flow
+    function applyTopic(i) {
+      current = i;
+      const topic = topics[i];
+      topicTitle.textContent = topic.title;
+      sideA.textContent = topic.sides[0];
+      sideB.textContent = topic.sides[1];
+      uiRenderLists(topic);
+      // update share link with ?topic=i
+      const url = new URL(window.location.href);
+      url.searchParams.set('topic', String(i));
+      shareLink.textContent = url.toString();
+      shareLink.onclick = () => navigator.clipboard.writeText(url.toString());
+    }
+
+    function startDebate() {
+      if (!joinedSide) return;
+      round = 1; usedStats.clear(); aScore = 0; bScore = 0;
+      crowdFeed.innerHTML = ''; modFeed.innerHTML = '';
+      addMod("Moderator: Opening statements—keep it tight.");
+      verdictBox.style.display = 'none';
+      startCrowdTicker();
+      t = parseInt(roundLengthSel.value, 10); timerEl.textContent = t + 's';
+      tick = setInterval(()=>{ t--; timerEl.textContent = t + 's'; if (t<=0) endRound(); }, 1000);
+      startBtn.disabled = true;
+      roundControls.style.display = 'flex';
+    }
+
+    function endRound() {
+      if (round===0 || round===99) return;
+      if (tick) { clearInterval(tick); tick = null; }
+      if (round >= 2) {
+        round = 99;
+        stopCrowdTicker();
+        const statWeight = usedStats.size * 2;
+        const base = Math.floor(Math.random()*100);
+        const tilt = joinedSide==='A' ? statWeight : joinedSide==='B' ? -statWeight : 0;
+        const final = base + tilt;
+        if (final >= 50) { aScore = 100-final; bScore = final; } else { aScore = final; bScore = 100-final; }
+        const topic = topics[current];
+        const winner = aScore > bScore ? topic.sides[0] : topic.sides[1];
+        verdictText.textContent = `Winner: ${winner}. Best moment: ${crowdFeed.firstChild ? crowdFeed.firstChild.textContent : '—'}`;
+        verdictBox.style.display = 'block';
+        addMod('Moderator: Verdict time—simulated audience has spoken.');
+        roundControls.style.display = 'none';
+        return;
+      }
+      round++;
+      addMod(randomPick(modPrompts.slice(1)));
+      t = parseInt(roundLengthSel.value, 10); timerEl.textContent = t + 's';
+      tick = setInterval(()=>{ t--; timerEl.textContent = t + 's'; if (t<=0) endRound(); }, 1000);
+    }
+
+    function dropStat(key) {
+      if (!joinedSide || usedStats.has(key)) return;
+      usedStats.add(key);
+      const topic = topics[current];
+      const sideName = joinedSide === 'A' ? topic.sides[0] : topic.sides[1];
+      addCrowd(`Stat drop by ${sideName} → ${key}`);
+    }
+
+    // Events
+    personaSel.onchange = () => { document.getElementById('personaLabel').textContent = personaSel.value; };
+    joinA.onclick = () => { joinedSide = 'A'; joinA.textContent = 'Joined'; joinB.textContent = 'Join Side B'; startBtn.disabled = false; };
+    joinB.onclick = () => { joinedSide = 'B'; joinB.textContent = 'Joined'; joinA.textContent = 'Join Side A'; startBtn.disabled = false; };
+    startBtn.onclick = startDebate;
+    endRoundBtn.onclick = endRound;
+    resetBtn.onclick = () => {
+      joinedSide = null; round = 0; usedStats.clear(); aScore = bScore = 0;
+      startBtn.disabled = true; roundControls.style.display = 'none'; verdictBox.style.display = 'none';
+      crowdFeed.innerHTML = '<div class="muted">The stands will roar when the debate starts…</div>';
+      modFeed.innerHTML = '<div class="muted">Waiting for debate…</div>';
+      stopCrowdTicker();
+      joinA.textContent = 'Join Side A'; joinB.textContent = 'Join Side B';
+    };
+
+    // Boot
+    (async function boot(){
+      try {
+        const res = await fetch('./topics.json', { cache: 'no-store' });
+        topics = await res.json();
+        // populate selector
+        topicSel.innerHTML = topics.map((t, i) => `<option value="${i}">${t.title}</option>`).join('');
+        // preselect from URL ?topic=i
+        const url = new URL(window.location.href);
+        const idx = parseInt(url.searchParams.get('topic') || '0', 10);
+        const safeIdx = Number.isFinite(idx) && idx >= 0 && idx < topics.length ? idx : 0;
+        topicSel.value = String(safeIdx);
+        applyTopic(safeIdx);
+        topicSel.onchange = (e) => applyTopic(parseInt(e.target.value, 10));
+      } catch (e) {
+        topicTitle.textContent = 'Failed to load topics.json';
+      }
+    })();
+  </script>
+</body>
+</html>
